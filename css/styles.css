@@ -112,11 +112,14 @@ button {
 }
 
 .btn__reset {
-  padding: 8px;
+  padding: 16px;
   margin: 50px auto;
   background: #FFFFFF;
   border-radius: 5px;
   font-size: var(--font-size-medium);
+  font-family: 'Roboto', sans-serif;
+  background-color: #FFA500;
+  box-shadow: 3px 3px #CE8500;
 }
 
 /* Overlay */
@@ -143,7 +146,7 @@ button {
 }
 
 .start a {
-  color: var(--color-win);
+  color: #fff;
 }
 
 .win {
