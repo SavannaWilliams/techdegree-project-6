@@ -15,9 +15,21 @@ function getRandomPhraseAsArray (arr) {
     let maxLength = arr.length + 1;
     let randNum = Math.floor(Math.random() * (maxLength - 1)) + 1;
     let choice = arr[randNum - 1];
-    let result = choice.split('');
-    console.log(result);
+    return choice.split('');
 }
 
+function addPhraseToDisplay(arr){
+    for (let i = 0; i < arr.length; i++) {
+        let character = arr[i];
+        let ul = document.getElementsByTagName('ul')[0];
+        let li = document.createElement('li');
+        li.textContent = character;
+        if (li.textContent !== ' ') {
+            li.classList.add('letter');
+        }
+        ul.appendChild(li);
+    }
+}
 
-getRandomPhraseAsArray(phrases);
+const phraseArray = getRandomPhraseAsArray(phrases);
+addPhraseToDisplay(phraseArray); 
