@@ -54,26 +54,51 @@ function addPhraseToDisplay(arr){
 function checkLetter (btn){
     // Get all the list elements with a class of 'letter'.
     let letters = document.getElementsByClassName('letter');
-    for (let i = 0; i< letters.length; i++) {
-        // If the current letter matches the pushed button, give it the class 'show' to show the tile and return it. Otherwise, do nothing.
-        if (letters[i] === btn) {
-            letters[i].classList.add('show');
-            let match = letters[i];
-            return match;
-        } else {
-            return null;
+    let match = '';
+    for (let i = 0; i < letters.length; i++) {
+        // Get the current list item.
+        let currentLi = letters[i];
+        // Get the text content of the current list item.
+        let currentLtr = letters[i].textContent;
+
+        // If the current letter matches the pushed button, give it the class 'show' to show the tile.
+        if (currentLtr === btn) {
+            currentLi.classList.add('show');
+            match = currentLtr;
         }
     }
+
+    if (match !== '') {
+        return match;
+    } else {
+        return null;
+    }
+    
 }
 
 keyboard.addEventListener('click', (e) => {
-    console.log(e.target);
+    // Add the class 'chosen' to the clicked letter and disable the key so it can't be clicked again.
     e.target.classList.add('chosen');
     e.target.disabled = true;
+    let btn = e.target.textContent;
+
+    // Run checkLetter and store result in letterFound.
+    let letterFound = checkLetter(btn);
+
+    if (letterFound === null) {
+        missed += 1;
+        console.log("Missed " + missed);
+        let scoreboard = document.getElementsByTagName('ol');
+        console.log(scoreboard);
+        let heart = document.querySelector('.tries:last-child');
+        console.log(heart);
+        scoreboard.removeChild(heart);
+    }
+    
 });
 
 
 // Pick a random phrase and return an array resulting from splitting the string.
 const phraseArray = getRandomPhraseAsArray(phrases);
 // Turn the array of characters into the letter game board display.
-addPhraseToDisplay(phraseArray); 
+addPhraseToDisplay(phraseArray);
