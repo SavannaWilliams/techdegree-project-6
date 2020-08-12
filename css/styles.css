@@ -155,10 +155,6 @@ button {
   background-color: var(--color-win);
 }
 
-.win a {
-  color: var(--color-win);
-}
-
 .lose {
   background-color: var(--color-lose);
 }
