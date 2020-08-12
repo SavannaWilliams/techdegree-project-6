@@ -53,6 +53,7 @@ button {
   -webkit-transition: var(--transition);
   -o-transition: var(--transition);
   transition: var(--transition);
+  cursor: pointer;
 }
 
 .main-container {
@@ -120,6 +121,7 @@ button {
   font-family: 'Roboto', sans-serif;
   background-color: #FFA500;
   box-shadow: 3px 3px #CE8500;
+  cursor: pointer;
 }
 
 /* Overlay */

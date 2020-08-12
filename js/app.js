@@ -7,6 +7,11 @@ let missed = 0;
 // Get the start button and intro overlay
 let startBtn = document.getElementsByClassName('btn__reset')[0];
 let overlay = document.getElementById('overlay');
+// Get all letters on the phrase board
+let letters = document.getElementsByClassName('letter');
+// Get all shown letters on the phrase board
+let shown = document.getElementsByClassName('show');
+
 
 // Hide the intro overlay when start button clicked
 startBtn.addEventListener('click', function() {
@@ -53,7 +58,6 @@ function addPhraseToDisplay(arr){
 
 function checkLetter (btn){
     // Get all the list elements with a class of 'letter'.
-    let letters = document.getElementsByClassName('letter');
     let match = '';
     for (let i = 0; i < letters.length; i++) {
         // Get the current list item.
@@ -73,7 +77,19 @@ function checkLetter (btn){
     } else {
         return null;
     }
-    
+}
+
+function checkWin () {
+    let showLength = shown.length;
+    let ltrsLength = letters.length;
+    if (showLength === ltrsLength) {
+        overlay.style.display = 'initial';
+        console.log('Win');
+
+    } else if (missed === 5) {
+        overlay.style.display = 'initial';
+        console.log('Lose');
+    }
 }
 
 keyboard.addEventListener('click', (e) => {
@@ -85,16 +101,16 @@ keyboard.addEventListener('click', (e) => {
     // Run checkLetter and store result in letterFound.
     let letterFound = checkLetter(btn);
 
+    /// If letterFound returns null (wrong letter clicked) then add one to Missed and remove the last heart in the ol.
     if (letterFound === null) {
         missed += 1;
         console.log("Missed " + missed);
-        let scoreboard = document.getElementsByTagName('ol');
-        console.log(scoreboard);
         let heart = document.querySelector('.tries:last-child');
-        console.log(heart);
-        scoreboard.removeChild(heart);
+        heart.remove();
     }
-    
+
+    // Check for win lose condition.
+    checkWin();
 });
 
 
