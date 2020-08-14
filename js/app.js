@@ -9,6 +9,8 @@ let missed = 0;
 let startBtn = document.querySelector('.btn__reset');
 let overlay = document.getElementById('overlay');
 let overlayTitle = document.querySelector('#overlay .title');
+// Get the document's phrase ul.
+let ul = document.querySelector('#phrase ul');
 // Get all letters on the phrase board
 let letters = document.getElementsByClassName('letter');
 // Get all shown letters on the phrase board
@@ -20,21 +22,29 @@ let lastHeart = -1;
 
 // Start and reset button event listener
 startBtn.addEventListener('click', function(e) {
+    // Hide overlay and remove start class to prepare for win or loss.
     overlay.style.display = 'none';
-    console.log("Total Missed: " + missed);
+    overlay.classList.remove('start');
 
+    // Remove shown letters.
     for (let i = 0; i < letters.length; i++) {
-        // Get the current list item.
         let currentLi = letters[i];
         currentLi.classList.remove('show');
     }
-
+    // Remove chosen keyboard styling.
     keyBtns.forEach(btn => {
         btn.classList.remove('chosen');
         btn.disabled = false;
     });
-
+    // Change start button into reset button by changing button text.
     startBtn.textContent = "Play again?";
+
+    // Check for and remove overlay classes to prepare for new win or loss.
+    if (overlay.classList.contains('win')){
+        overlay.classList.remove('win');
+    } else if (overlay.classList.contains('lose')){
+        overlay.classList.remove('lose');
+    }
 });
 
 // Array of phrases for the game
@@ -58,8 +68,6 @@ function addPhraseToDisplay(arr){
     for (let i = 0; i < arr.length; i++) {
         // Select a character in the array.
         let character = arr[i];
-        // Get the document's empty ul.
-        let ul = document.getElementsByTagName('ul')[0];
         // Create an empty li.
         let li = document.createElement('li');
         // Give the li the text content of the selected character.
@@ -92,7 +100,6 @@ function checkLetter (btn){
                 match = currentLtr;
             }
         }
-
         if (match !== '') {
             return match;
         } else {
@@ -102,24 +109,32 @@ function checkLetter (btn){
 }
 
 function resetGame() {
+    // Reset missed and lastHeart to initial numbers.
     missed = 0;
     lastHeart = -1;
-    console.log(lastHeart);
+
+    //Clear current phrase board.
+    while(ul.firstChild ){
+        ul.removeChild(ul.firstChild);
+      }
+
+    // Pick new phrase and add to letter game board.
+    let phraseArray = getRandomPhraseAsArray(phrases);
+    addPhraseToDisplay(phraseArray);
 }
 
 function checkWin () {
     let showLength = shown.length;
     let ltrsLength = letters.length;
-    // Win- If shown letters are equal to the total number of letters in the phrase, the player wins.
+    // Win: If shown letters are equal to the total number of letters in the phrase, the player wins.
     if (showLength === ltrsLength) {
         // Update the overlay
         overlay.style.display = '';
-        overlay.classList.remove('start');
         overlay.classList.add('win');
         overlayTitle.textContent = "You won!";
         //Reset missed.
         resetGame();
-    // Lose- If the play has had 5 wrong choices, they lose.
+    // Lose: If the play has had 5 wrong choices, they lose.
     } else if (missed === 5) {
         // Update the overlay
         overlay.style.display = '';
@@ -159,6 +174,6 @@ keyboard.addEventListener('click', (e) => {
 
 
 // Pick a random phrase and return an array resulting from splitting the string.
-const phraseArray = getRandomPhraseAsArray(phrases);
+let phraseArray = getRandomPhraseAsArray(phrases);
 // Turn the array of characters into the letter game board display.
 addPhraseToDisplay(phraseArray);
