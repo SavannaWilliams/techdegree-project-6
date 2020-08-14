@@ -6,22 +6,35 @@ let phrase = document.getElementById('phrase');
 // Set the starting incorrect letters to 0
 let missed = 0;
 // Get the start button, intro overlay, and overlay header text.
-let startBtn = document.getElementsByClassName('btn__reset')[0];
+let startBtn = document.querySelector('.btn__reset');
 let overlay = document.getElementById('overlay');
 let overlayTitle = document.querySelector('#overlay .title');
 // Get all letters on the phrase board
 let letters = document.getElementsByClassName('letter');
 // Get all shown letters on the phrase board
 let shown = document.getElementsByClassName('show');
-// Prepare for reset button
-let resetBtn = document.createElement('a');
-resetBtn.textContent = "Play again?";
-resetBtn.classList.add('btn__reset');
-overlay.appendChild(resetBtn);
-resetBtn.style.display = "none";
-// Hide the intro overlay when start button clicked
-startBtn.addEventListener('click', function() {
+// Declare "hearts" as all none hidden hearts in the ul.
+let hearts = document.querySelectorAll(".tries:not([style*='display: none']");
+// Start lastHeart at -1 so can remove 0 indexed final heart.
+let lastHeart = -1;
+
+// Start and reset button event listener
+startBtn.addEventListener('click', function(e) {
     overlay.style.display = 'none';
+    console.log("Total Missed: " + missed);
+
+    for (let i = 0; i < letters.length; i++) {
+        // Get the current list item.
+        let currentLi = letters[i];
+        currentLi.classList.remove('show');
+    }
+
+    keyBtns.forEach(btn => {
+        btn.classList.remove('chosen');
+        btn.disabled = false;
+    });
+
+    startBtn.textContent = "Play again?";
 });
 
 // Array of phrases for the game
@@ -88,6 +101,12 @@ function checkLetter (btn){
     }
 }
 
+function resetGame() {
+    missed = 0;
+    lastHeart = -1;
+    console.log(lastHeart);
+}
+
 function checkWin () {
     let showLength = shown.length;
     let ltrsLength = letters.length;
@@ -98,25 +117,8 @@ function checkWin () {
         overlay.classList.remove('start');
         overlay.classList.add('win');
         overlayTitle.textContent = "You won!";
-        // Create the reset button
-        startBtn.remove();
-        resetBtn.style.display = "";
-
-        resetBtn.addEventListener('click', (e) => {
-            missed = 0;
-            for (let i = 0; i < letters.length; i++) {
-                // Get the current list item.
-                let currentLi = letters[i];
-                currentLi.classList.remove('show');
-            }
-            keyBtns.forEach(btn => {
-                btn.classList.remove('chosen');
-                btn.disabled = false;
-            });
-
-            overlay.style.display = 'none';
-        });
-        
+        //Reset missed.
+        resetGame();
     // Lose- If the play has had 5 wrong choices, they lose.
     } else if (missed === 5) {
         // Update the overlay
@@ -124,9 +126,8 @@ function checkWin () {
         overlay.classList.remove('start');
         overlay.classList.add('lose');
         overlayTitle.textContent = "You lost.";
-        // Create the reset button
-        startBtn.remove();
-        resetBtn.style.display = "";
+        //Reset game.
+        resetGame();
     }
 }
 
@@ -145,12 +146,11 @@ keyboard.addEventListener('click', (e) => {
     // Run checkLetter and store result in letterFound.
     let letterFound = checkLetter(btn);
 
-    /// If letterFound returns null (wrong letter clicked) then add one to Missed and remove the last heart in the ol.
+    /// If letterFound returns null (wrong letter clicked) then add one to Missed and hide the last heart in the ol.
     if (letterFound === null) {
         missed += 1;
-        console.log("Missed " + missed);
-        let heart = document.querySelector('.tries:last-child');
-        heart.remove();
+        lastHeart +=1;
+        hearts[lastHeart].style.display = 'none';
     }
 
     // Check for win lose condition.
