@@ -38,10 +38,14 @@ startBtn.addEventListener('click', function(e) {
         currentLi.classList.remove('show');
     }
 
-    // Remove none display type on hearts and check for and remove hidden class.
+    // Remove none display and 0 opacity on hearts and check for and remove hidden class.
     for (let i = 0; i < hearts.length; i++) {
         let currentHeart = hearts[i];
         currentHeart.style.display = '';
+        if (i === 4){
+            currentHeart.style.opacity = 1;
+        }
+
         if (currentHeart.classList.contains('hidden')){
             currentHeart.classList.remove('hidden');
         }
@@ -69,7 +73,7 @@ startBtn.addEventListener('click', function(e) {
 
 // Array of phrases for the game
 const phrases = ['javascript is fun', 'bootstrap is a framework', 'react was developed by facebook', 'visual studio code is free', 'html is a markup language',
-                  'css defines site styling', 'jquery is open source', 'sql is a database language',  'php is a backend language'];
+                  'css defines website styling', 'jquery is open source', 'sql is a database language',  'php is a backend language'];
 
 function getRandomPhraseAsArray (arr) {
     // Get array's length, then + 1 to account for the fact that maxLength's value is exclusive in randNum.
@@ -121,6 +125,7 @@ function checkLetter (btn){
                 match = currentLtr;
             }
         }
+        // Return the correct key if match made, return null if incorrect key clicked.
         if (match !== '') {
             return match;
         } else {
@@ -149,7 +154,7 @@ function checkWin () {
     let ltrsLength = letters.length;
     // Win: If shown letters are equal to the total number of letters in the phrase, the player wins.
     if (showLength === ltrsLength) {
-        // Update the overlay after .28 seconds (enough time for the final heart to disappear).
+        // Update the overlay after .1 seconds (enough time for the final heart to disappear).
         setTimeout(function(){
             overlay.style.display = '';
             overlay.classList.add('win');
@@ -161,11 +166,11 @@ function checkWin () {
             overlayTitle.textContent = "You won!";
             //Reset missed.
             resetGame();
-        }, 280);
+        }, 100);
 
     // Lose: If the play has had 5 wrong choices, they lose.
     } else if (missed === 5) {
-        // Update the overlay after .28 seconds.
+        // Update the overlay after .1 seconds.
         setTimeout(function(){
             overlay.style.display = '';
             overlay.classList.remove('start');
@@ -173,7 +178,7 @@ function checkWin () {
             overlayTitle.textContent = "You lost.";
             //Reset game.
             resetGame();
-        }, 280);
+        }, 100);
     }
 }
 
@@ -195,17 +200,18 @@ keyboard.addEventListener('click', (e) => {
     /// If letterFound returns null (wrong letter clicked) then add one to Missed and hide the last heart in the ol.
     if (letterFound === null) {
         missed += 1;
-        lastHeart +=1;
+        // Keep user from creating invalid lastHeart number when clicking fast.
+        if (lastHeart <= 3){
+            lastHeart +=1;
+        }
+
         // If heart is not the fifth heart, add .hidden which contains transitions and an animation.
         if (lastHeart !== 4) {
             hearts[lastHeart].classList.add('hidden');
-            // Delay setting the display to none until the animations have finished (in 1 second).
-            setTimeout(function(){
-                hearts[lastHeart].style.display = 'none';
-            }, 1000);
-        // If the heart is the fifth heart, skip the animations and hide immediately.
-        } else {
-            hearts[lastHeart].style.display = 'none';
+        }
+        else {
+            // If the heart is the fifth heart, skip the animations and hide immediately.
+            hearts[lastHeart].style.opacity = 0;
         }
     }
 
