@@ -163,7 +163,7 @@ function checkWin () {
             overlay.classList.add('win');
             // Create an h3, put the current phrase in it, and prepend it before the "You won!" text.
             winPhrase = document.createElement('h3');
-            winPhrase.textContent = `Correct: "${currentPhrase}!"`;
+            winPhrase.textContent = `Correct: "${currentPhrase}"`;
             winPhrase.classList.add('win-phrase');
             overlay.prepend(winPhrase);
             overlayTitle.textContent = "You won!";
