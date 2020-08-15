@@ -61,14 +61,15 @@ startBtn.addEventListener('click', function(e) {
         // Check for and remove overlay classes to prepare for new win or loss.
         if (overlay.classList.contains('win')){
             overlay.classList.remove('win');
-        } else if (overlay.classList.contains('lose')){
-            overlay.classList.remove('lose');
+            // Remove winPrase node.
+            overlay.removeChild(winPhrase);
         }
     }, 200);
 });
 
 // Array of phrases for the game
-const phrases = ['javascript is fun', 'bootstrap is a framework', 'react was developed by facebook', 'visual studio code is free', 'html is a markup language'];
+const phrases = ['javascript is fun', 'bootstrap is a framework', 'react was developed by facebook', 'visual studio code is free', 'html is a markup language',
+                  'css defines site styling', 'jquery is open source', 'sql is a database language',  'php is a backend language'];
 
 function getRandomPhraseAsArray (arr) {
     // Get array's length, then + 1 to account for the fact that maxLength's value is exclusive in randNum.
@@ -78,7 +79,7 @@ function getRandomPhraseAsArray (arr) {
     let randNum = Math.floor(Math.random() * (maxLength - 1)) + 1;
     // Arrays start at zero, so to include that first string as a possible choice, subtract one from randNum.
     currentPhrase = arr[randNum - 1];
-    console.log(currentPhrase);
+    console.log(`Current phrase: "${currentPhrase}"`);
     // Split the string up by character.
     return currentPhrase.split('');
 }
@@ -152,8 +153,11 @@ function checkWin () {
         setTimeout(function(){
             overlay.style.display = '';
             overlay.classList.add('win');
-            winPhrase = overlay.prepend(`Correct! "${currentPhrase}."`);
+            // Create an h3, put the current phrase in it, and prepend it before the "You won!" text.
+            winPhrase = document.createElement('h3');
+            winPhrase.textContent = `Correct: "${currentPhrase}!"`;
             winPhrase.classList.add('win-phrase');
+            overlay.prepend(winPhrase);
             overlayTitle.textContent = "You won!";
             //Reset missed.
             resetGame();
