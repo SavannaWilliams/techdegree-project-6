@@ -96,6 +96,11 @@ button {
 .show {
   color: #000;
   background-color: #76CE82;
+  transition: all .6s ease;
+  /* Using transition property after transition all overrides the all, but keeps from requiring duplicate timing code */
+  transition-property: background-color, color;
+  animation-duration:.4s;
+  animation-name: pop-up;
 }
 
 /* Keyboard */
@@ -122,6 +127,13 @@ button {
   background-color: #FFA500;
   box-shadow: 3px 3px #CE8500;
   cursor: pointer;
+}
+
+.btn__reset:hover {
+  background-color: #ffb42a;
+  transform: scale(1.1);
+  transition: all .2s ease;
+  transition-property: background-color, scale;
 }
 
 /* Overlay */
@@ -161,4 +173,33 @@ button {
 
 .lose a {
   color: var(--color-lose);
+}
+
+.win-phrase {
+  font-size: 2em;
+}
+
+/* Hearts */
+
+.hidden {
+  opacity: 0;
+  transition: opacity .6s ease .5s;
+  animation-duration: .4s;
+  animation-name: pop-in;
+}
+
+/* Animations */
+
+@keyframes pop-up {
+  0% { transform: scale(1); }
+  80% { transform: scale(1.2); }
+  90% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(1); }
+  80% { transform: scale(.8); }
+  90% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
