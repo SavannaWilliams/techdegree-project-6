@@ -133,7 +133,7 @@ button {
   background-color: #ffb42a;
   transform: scale(1.1);
   transition: all .2s ease;
-  transition-property: background-color, scale;
+  transition-property: background-color, transform;
 }
 
 /* Overlay */

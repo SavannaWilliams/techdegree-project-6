@@ -68,6 +68,9 @@ startBtn.addEventListener('click', function(e) {
             // Remove winPrase node.
             overlay.removeChild(winPhrase);
         }
+        if (overlay.classList.contains('lose')){
+            overlay.classList.remove('lose');
+        }
     }, 200);
 });
 
